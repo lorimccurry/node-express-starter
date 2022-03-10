@@ -1,13 +1,14 @@
-import express, { Request, Response, Application } from 'express';
-
-const app: Application = express();
+import http from 'http';
+import app from './app';
 
 const PORT = process.env.PORT || 8000;
 
-app.get('/', (req: Request, res: Response): void => {
-  res.send('Node.js & TS Working!');
-});
+const server = http.createServer(app);
 
-app.listen(PORT, (): void => {
-  console.log(`Server running on port ${PORT}...`);
-});
+function startServer() {
+  server.listen(PORT, (): void => {
+    console.log(`Server running on port ${PORT}...`);
+  });
+}
+
+startServer();
