@@ -14,3 +14,6 @@
 
     # custom definition files
     /src/types/
+
+    # config files
+    jest.config.js

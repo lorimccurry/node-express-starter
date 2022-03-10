@@ -19,6 +19,7 @@
     "@typescript-eslint/no-unused-vars": "off"
   },
   "root": true,
+  "ignorePatterns": ["jest.config.js"],
   "overrides": [
     {
       "files": ["tests/**/*.ts"],
