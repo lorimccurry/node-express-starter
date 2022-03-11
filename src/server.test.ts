@@ -1,6 +1,6 @@
 import 'jest';
 import supertest from 'supertest';
-import app from '../../src/app';
+import app from './app';
 
 describe('Test GET /', (): void => {
   const request = supertest(app);

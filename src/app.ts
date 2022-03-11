@@ -1,9 +1,11 @@
 import express, { Request, Response, Application } from 'express';
-import morgan from 'morgan';
+import helmet from 'helmet';
 import Logger from './lib/logger';
 import morganMiddleware from './config/morganMiddleware';
 
 const app: Application = express();
+
+app.use(helmet());
 
 app.use(morganMiddleware);
 

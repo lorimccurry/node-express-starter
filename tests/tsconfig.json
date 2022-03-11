@@ -1,9 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "references": [{ "name": "node-starter", "path": ".." }],
-  "compilerOptions": {
-    "types": ["jest"],
-    "rootDir": ".."
-  },
-  "include": ["."]
-}
