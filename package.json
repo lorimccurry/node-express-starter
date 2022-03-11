@@ -5,9 +5,9 @@
   "main": "dist/server.js",
   "types": "dist/server.d.ts",
   "scripts": {
-    "build-tsc": "tsc",
+    "build": "tsc",
     "dev-tsc": "tsc --watch --preserveWatchOutput",
-    "build": "ts-node ./src/server.ts",
+    "ts-node": "ts-node ./src/server.ts",
     "dev": "nodemon src/server.ts",
     "lint": "eslint src --ext js,ts",
     "lint-fix": "eslint --fix src --ext js,ts",
