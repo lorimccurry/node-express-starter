@@ -6,7 +6,7 @@ module.exports = {
   moduleDirectories: ['node_modules', 'src'],
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.json',
+      tsconfig: 'tsconfig.eslint.json',
     },
   },
 };
