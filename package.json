@@ -5,14 +5,15 @@
   "main": "dist/server.js",
   "types": "dist/server.d.ts",
   "scripts": {
+    "start": "nodemon src/server.ts",
+    "start:production": "NODE_ENV=production node dist/src/server.js",
     "build": "tsc",
     "dev-tsc": "tsc --watch --preserveWatchOutput",
     "ts-node": "ts-node ./src/server.ts",
-    "dev": "nodemon src/server.ts",
     "lint": "eslint src --ext js,ts",
     "lint-fix": "eslint --fix src --ext js,ts",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test": "NODE_ENV=test jest --coverage",
+    "test:watch": "NODE_ENV=test jest --watch",
     "pretty": "prettier --write 'src/**/*.ts'"
   },
   "keywords": [],
