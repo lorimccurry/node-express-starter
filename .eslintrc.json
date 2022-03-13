@@ -6,25 +6,27 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:jest/recommended",
+    "plugin:jest/style"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 12,
-    "project": ["./tsconfig.eslint.json"]
+    "project": "./tsconfig.eslint.json"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "jest"],
   "rules": {
     "prefer-const": "error",
     "@typescript-eslint/no-unused-vars": "off"
   },
-  "root": true,
   "ignorePatterns": ["jest.config.js"],
   "overrides": [
     {
       "files": ["src/**/*.test.ts"],
       "env": {
         "jest": true,
+        "jest/globals": true,
         "node": true
       }
     }
