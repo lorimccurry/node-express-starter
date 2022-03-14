@@ -6,7 +6,6 @@
   "singleQuote": true,
   "trailingComma": "all",
   "tabWidth": 2,
-  "parser": "typescript",
   "arrowParens": "always",
   "endOfLine": "lf",
   "overrides": [
