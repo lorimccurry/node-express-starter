@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  node_backend:
+    container_name: node_backend
+    image: lorimccurry/node-express-starter
+    links:
+      - db
+    environment:
+      - PGUSER=piperous
+      - PGPASSWORD=123456
+      - PGDATABASE=defaultdb
+      - PGHOST=db
+  db:
+    container_name: db
+    image: 'postgres:14'
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=piperous
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=defaultdb
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
