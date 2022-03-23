@@ -3,7 +3,10 @@ version: '3.8'
 services:
   node_backend:
     container_name: node_backend
-    image: lorimccurry/node-express-starter
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
     links:
       - db
     environment:
@@ -11,6 +14,12 @@ services:
       - PGPASSWORD=123456
       - PGDATABASE=defaultdb
       - PGHOST=db
+    volumes:
+      - ./src:/home/node/app/src
+      - ./nodemon.json:/home/node/app/nodemon.json
+    ports:
+      - '${PORT}:${PORT}'
+    command: npm run dev
   db:
     container_name: db
     image: 'postgres:14'

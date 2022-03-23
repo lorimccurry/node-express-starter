@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  node_backend:
+    build:
+      target: production
+    command: node dist/server.js

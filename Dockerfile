@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:16-alpine as base
 
 # update packages
 RUN apk update
@@ -9,13 +9,13 @@ WORKDIR /home/node/app
 
 COPY --chown=node:node package*.json ./
 COPY --chown=node:node tsconfig.json ./
-COPY --chown=node:node src ./src
 
 RUN npm install
-RUN npm run build
 
 COPY --chown=node:node . .
 
-EXPOSE 3000
+FROM base as production
 
-CMD ["node", "dist/server.js"]
+ENV NODE_PATH=./dist
+
+RUN npm run build
