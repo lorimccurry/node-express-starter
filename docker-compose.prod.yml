@@ -4,4 +4,6 @@ services:
   node_backend:
     build:
       target: production
+    environment:
+      - NODE_ENV=production
     command: node dist/server.js
