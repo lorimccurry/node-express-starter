@@ -4,8 +4,15 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import prisma from '../../lib/prisma';
 import { User } from '../../types/user';
+import { jwtSecret } from '../../envs';
 
 interface SignUpReqBody {
+  email: string;
+  password: string;
+  name?: string;
+}
+
+interface SignInReqBody {
   email: string;
   password: string;
 }
@@ -28,7 +35,7 @@ async function httpSignUp(
     });
   } catch (e) {
     console.log(e);
-    res.status(401).json(`An error occurred with user sign up.`);
+    res.status(401).json('This user already exists.');
     return;
   }
 
@@ -38,7 +45,7 @@ async function httpSignUp(
       id: user.id,
       time: Date.now(),
     },
-    'hello secret',
+    jwtSecret,
     {
       expiresIn: '8h',
     },
@@ -55,7 +62,51 @@ async function httpSignUp(
     }),
   );
 
+  delete user.password;
   res.status(200).json(user);
 }
 
-export { httpSignUp };
+async function httpSignIn(
+  req: Request<unknown, unknown, SignInReqBody>,
+  res: Response,
+) {
+  const { email, password } = req.body;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (user && bcrypt.compareSync(password, user.password)) {
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        time: Date.now(),
+      },
+      jwtSecret,
+      {
+        expiresIn: '8h',
+      },
+    );
+
+    res.setHeader(
+      'Set-Cookie',
+      cookie.serialize('ACCESS_TOKEN', token, {
+        httpOnly: true,
+        maxAge: 8 * 60 * 60,
+        path: '/',
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+      }),
+    );
+
+    delete user.password;
+    res.status(200).json(user);
+  } else {
+    res.status(401).json({ error: 'Email or Password is wrong.' });
+  }
+}
+
+export { httpSignUp, httpSignIn };
