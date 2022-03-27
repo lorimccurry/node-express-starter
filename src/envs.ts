@@ -5,6 +5,7 @@ dotenv.config({ path: `${__dirname}/../.env` });
 const env = process.env.NODE_ENV || 'development';
 const isDevelopment = env === 'development';
 const isTest = env === 'test';
+const jwtSecret = process.env.JWT_SECRET;
 
 // Base
 const appUrl: string = process.env.APP_URL || 'localhost';
@@ -19,6 +20,7 @@ export {
   env,
   isDevelopment,
   isTest,
+  jwtSecret,
   appUrl,
   port,
   dbUsername,

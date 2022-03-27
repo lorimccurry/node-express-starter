@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { Response } from 'express';
 import Logger from '../../lib/logger';
 
 const loggerRouter = express.Router();
 
-loggerRouter.get('/', (_, res) => {
+loggerRouter.get('/', (_, res: Response) => {
   Logger.error('This is an error log');
   Logger.warn('This is a warn log');
   Logger.info('This is a info log');

@@ -8,26 +8,30 @@ services:
       dockerfile: Dockerfile
       target: base
     links:
-      - db
+      - postgres-db
     environment:
-      - PGUSER=piperous
-      - PGPASSWORD=123456
-      - PGDATABASE=defaultdb
-      - PGHOST=db
+      - NODE_ENV=development
+    env_file:
+      - .env
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
     ports:
       - '${PORT}:${PORT}'
+    expose:
+      - ${PORT}
     command: npm run dev
-  db:
-    container_name: db
+  postgres-db:
+    container_name: postgres-db
     image: 'postgres:14'
+    restart: always
+    env_file:
+      - .env
+    expose:
+      - '5432'
     ports:
       - '5432:5432'
-    environment:
-      - POSTGRES_USER=piperous
-      - POSTGRES_PASSWORD=12345
-      - POSTGRES_DB=defaultdb
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+volumes:
+  postgres: ~

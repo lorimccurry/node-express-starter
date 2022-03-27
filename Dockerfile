@@ -1,18 +1,20 @@
+# dev image
 FROM node:16-alpine as base
-
-# update packages
-RUN apk update
 
 USER node
 
 WORKDIR /home/node/app
 
 COPY --chown=node:node package*.json ./
+COPY --chown=node:node prisma ./prisma/
 
 RUN npm install
 
 COPY --chown=node:node . .
 
+RUN npm run generate
+
+# production image
 FROM base as production
 
 ENV NODE_PATH=./dist
