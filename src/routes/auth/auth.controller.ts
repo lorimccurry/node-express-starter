@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import prisma from '../../lib/prisma';
 import { User } from '../../types/user';
-import { Prisma } from '@prisma/client';
 
 interface SignUpReqBody {
   email: string;
@@ -14,7 +13,7 @@ interface SignUpReqBody {
 async function httpSignUp(
   req: Request<unknown, unknown, SignUpReqBody>,
   res: Response,
-) {
+): Promise<void> {
   const salt = bcrypt.genSaltSync();
   const { email, password } = req.body;
 
@@ -29,7 +28,7 @@ async function httpSignUp(
     });
   } catch (e) {
     console.log(e);
-    res.status(401).json(`An error occurred`);
+    res.status(401).json(`An error occurred with user sign up.`);
     return;
   }
 
@@ -56,7 +55,7 @@ async function httpSignUp(
     }),
   );
 
-  return res.status(200).json(user);
+  res.status(200).json(user);
 }
 
 export { httpSignUp };

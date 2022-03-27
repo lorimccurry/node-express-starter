@@ -18,7 +18,13 @@
   "plugins": ["@typescript-eslint", "jest"],
   "rules": {
     "prefer-const": "error",
-    "@typescript-eslint/no-unused-vars": "off"
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        "checksVoidReturn": false
+      }
+    ]
   },
   "ignorePatterns": ["jest.config.js"],
   "overrides": [
