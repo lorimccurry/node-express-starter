@@ -105,7 +105,7 @@ async function httpSignIn(
     delete user.password;
     res.status(200).json(user);
   } else {
-    res.status(401).json({ error: 'Email or Password is wrong.' });
+    res.status(401).json({ error: 'Email or Password is incorrect.' });
   }
 }
 

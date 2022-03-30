@@ -16,11 +16,27 @@ services:
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
+      - /home/node/app/prisma
     ports:
       - '${PORT}:${PORT}'
     expose:
       - ${PORT}
     command: npm run dev
+  prisma:
+    container_name: prisma
+    links:
+      - postgres-db
+    depends_on:
+      - postgres-db
+    ports:
+      - '5555:5555'
+    build:
+      context: prisma
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - /home/node/app/prisma
   postgres-db:
     container_name: postgres-db
     image: 'postgres:14'
@@ -34,4 +50,4 @@ services:
     volumes:
       - ./pgdata:/var/lib/postgresql/data
 volumes:
-  postgres: ~
+  postgres:
