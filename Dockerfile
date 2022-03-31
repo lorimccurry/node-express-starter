@@ -12,7 +12,7 @@ RUN npm install
 
 COPY --chown=node:node . .
 
-RUN npm run generate
+RUN npx prisma generate
 
 # production image
 FROM base as production

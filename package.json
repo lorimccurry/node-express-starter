@@ -15,8 +15,7 @@
     "test": "NODE_ENV=test jest --coverage",
     "test:watch": "NODE_ENV=test jest --watch",
     "pretty": "prettier --write 'src/**/*.ts'",
-    "prepare": "is-ci || husky install",
-    "generate": "npx prisma generate"
+    "prepare": "is-ci || husky install"
   },
   "keywords": [],
   "author": "Lori McCurry",
