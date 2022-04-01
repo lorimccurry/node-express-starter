@@ -63,7 +63,7 @@ async function httpSignUp(
   );
 
   delete user.password;
-  res.status(200).json(user);
+  res.status(201).json(user);
 }
 
 async function httpSignIn(
