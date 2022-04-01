@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import supertest from 'supertest';
-import cookie from 'cookie';
 import app from '../../app';
 import prisma from '../../lib/prisma';
 
@@ -18,7 +19,6 @@ interface UserResponseBody {
 
 interface UserResponseHeaders {
   'set-cookie'?: [string];
-  cookie: string;
 }
 
 describe('POST /signup', (): void => {
@@ -47,6 +47,7 @@ describe('POST /signup', (): void => {
     expect(email).toEqual(newUserRequest.email);
     expect(name).toBeNull();
 
-    expect(response.headers['set-cookie'][0]).toContain('ACCESS_TOKEN');
+    const tokenHeaderCookie = response.headers['set-cookie'][0];
+    expect(tokenHeaderCookie).toContain('ACCESS_TOKEN');
   });
 });

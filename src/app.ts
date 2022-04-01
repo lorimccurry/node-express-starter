@@ -1,5 +1,6 @@
 import express, { Request, Response, Application } from 'express';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import morganMiddleware from './config/morganMiddleware';
 
 import api from './routes/api';
@@ -11,6 +12,8 @@ app.use(helmet());
 app.use(morganMiddleware);
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use('/v1', api);
 
