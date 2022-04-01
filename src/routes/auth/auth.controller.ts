@@ -24,6 +24,11 @@ async function httpSignUp(
   const salt = bcrypt.genSaltSync();
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    res.status(401).json({ error: 'Email and Password required to sign up.' });
+    return;
+  }
+
   let user: User;
 
   try {
@@ -35,7 +40,7 @@ async function httpSignUp(
     });
   } catch (e) {
     console.log(e);
-    res.status(401).json('This user already exists.');
+    res.status(401).json({ error: 'This user already exists.' });
     return;
   }
 
