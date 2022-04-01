@@ -1,6 +1,7 @@
 import supertest from 'supertest';
 import app from '../../app';
 import prisma from '../../lib/prisma';
+import { SignUpReqBody } from './auth.controller';
 
 interface UserResponse {
   body: UserResponseBody;
@@ -19,82 +20,157 @@ interface UserResponseBody {
 interface UserResponseHeaders {
   'set-cookie'?: [string];
 }
-
-describe('POST /signup', (): void => {
+describe('auth', (): void => {
   const request = supertest(app);
 
-  const newUserReq = {
+  const userReq = {
     email: 'l@l.com',
     password: 'password',
   };
 
-  const newUserReqNoEmail = {
+  const userReqNoEmail = {
     email: '',
     password: 'password',
   };
 
-  const newUserReqNoPassword = {
+  const userReqNoPassword = {
     email: 'l@l.com',
     password: '',
   };
 
-  beforeEach(async () => {
-    await prisma.user.deleteMany();
+  const unregisteredUserReq = {
+    email: 'l@m.com',
+    password: 'password',
+  };
+
+  describe('POST /signup', (): void => {
+    afterEach(async () => {
+      await clearUserDB();
+    });
+
+    test('It should respond with 201 success, new user object and token cookie', async () => {
+      await clearUserDB();
+      const response: UserResponse = await request
+        .post('/v1/auth/signup')
+        .send(userReq)
+        .expect('Content-Type', /json/)
+        .expect(201);
+
+      confirmUserResBody(response.body, userReq);
+      confirmHeaderToken(response.headers);
+    });
+
+    test('It should catch an empty email', async () => {
+      const response: UserResponse = await request
+        .post('/v1/auth/signup')
+        .send(userReqNoEmail)
+        .expect('Content-Type', /json/)
+        .expect(401);
+
+      expect(response.body.error).toBe(
+        'Email and Password required to sign up.',
+      );
+    });
+
+    test('It should catch an empty password', async () => {
+      const response: UserResponse = await request
+        .post('/v1/auth/signup')
+        .send(userReqNoPassword)
+        .expect('Content-Type', /json/)
+        .expect(401);
+
+      expect(response.body.error).toBe(
+        'Email and Password required to sign up.',
+      );
+    });
+
+    test('It should not create a user that exists', async () => {
+      await request
+        .post('/v1/auth/signup')
+        .send(userReq)
+        .expect('Content-Type', /json/)
+        .expect(201);
+
+      const response: UserResponse = await request
+        .post('/v1/auth/signup')
+        .send(userReq)
+        .expect('Content-Type', /json/)
+        .expect(401);
+
+      expect(response.body.error).toBe('This user already exists.');
+    });
   });
 
-  test('It should respond with 201 success, new user object and token cookie', async () => {
-    const response: UserResponse = await request
-      .post('/v1/auth/signup')
-      .send(newUserReq)
-      .expect('Content-Type', /json/)
-      .expect(201);
+  describe('POST /signin', (): void => {
+    beforeAll(async () => {
+      await clearUserDB();
+      await request
+        .post('/v1/auth/signup')
+        .send(userReq)
+        .expect('Content-Type', /json/)
+        .expect(201);
+    });
 
-    const { id, updatedAt, createdAt, email, name } = response.body;
-    expect(id).toBeDefined();
-    expect(updatedAt).toBeDefined();
-    expect(createdAt).toBeDefined();
-    expect(email).toEqual(newUserReq.email);
-    expect(name).toBeNull();
+    test('It should respond with 200 success, existing user object and token cookie', async () => {
+      const response: UserResponse = await request
+        .post('/v1/auth/signin')
+        .send(userReq)
+        .expect('Content-Type', /json/)
+        .expect(200);
 
-    const tokenHeaderCookie = response.headers['set-cookie'][0];
-    expect(tokenHeaderCookie).toContain('ACCESS_TOKEN');
-  });
+      confirmUserResBody(response.body, userReq);
+      confirmHeaderToken(response.headers);
+    });
 
-  test('It should catch an empty email', async () => {
-    const response: UserResponse = await request
-      .post('/v1/auth/signup')
-      .send(newUserReqNoEmail)
-      .expect('Content-Type', /json/)
-      .expect(401);
+    test('It should catch an empty email', async () => {
+      const response: UserResponse = await request
+        .post('/v1/auth/signin')
+        .send(userReqNoEmail)
+        .expect('Content-Type', /json/)
+        .expect(401);
 
-    expect(response.body.error).toBe('Email and Password required to sign up.');
-  });
+      expect(response.body.error).toBe('Email or Password is incorrect.');
+    });
 
-  test('It should catch an empty password', async () => {
-    const response: UserResponse = await request
-      .post('/v1/auth/signup')
-      .send(newUserReqNoPassword)
-      .expect('Content-Type', /json/)
-      .expect(401);
+    test('It should catch an empty password', async () => {
+      const response: UserResponse = await request
+        .post('/v1/auth/signin')
+        .send(userReqNoPassword)
+        .expect('Content-Type', /json/)
+        .expect(401);
 
-    expect(response.body.error).toBe('Email and Password required to sign up.');
-  });
+      expect(response.body.error).toBe('Email or Password is incorrect.');
+    });
 
-  test('It should not create a user that exists', async () => {
-    await request
-      .post('/v1/auth/signup')
-      .send(newUserReq)
-      .expect('Content-Type', /json/)
-      .expect(201);
+    test('It should not sign in a user that does not exist', async () => {
+      const response: UserResponse = await request
+        .post('/v1/auth/signin')
+        .send(unregisteredUserReq)
+        .expect('Content-Type', /json/)
+        .expect(401);
 
-    const response = await request
-      .post('/v1/auth/signup')
-      .send(newUserReq)
-      .expect('Content-Type', /json/)
-      .expect(401);
-
-    const { error } = response.body as UserResponseBody;
-
-    expect(error).toBe('This user already exists.');
+      expect(response.body.error).toBe('Email or Password is incorrect.');
+    });
   });
 });
+
+async function clearUserDB() {
+  await prisma.user.deleteMany();
+}
+
+function confirmUserResBody(
+  resBody: UserResponseBody,
+  userReq: SignUpReqBody,
+): void {
+  const { id, updatedAt, createdAt, email, name } = resBody;
+  expect(id).toBeDefined();
+  expect(updatedAt).toBeDefined();
+  expect(createdAt).toBeDefined();
+  expect(email).toEqual(userReq.email);
+  expect(name).toBeNull();
+}
+
+function confirmHeaderToken(resHeader: UserResponseHeaders): void {
+  const tokenHeaderCookie = resHeader['set-cookie'][0];
+  expect(tokenHeaderCookie).toContain('ACCESS_TOKEN');
+}

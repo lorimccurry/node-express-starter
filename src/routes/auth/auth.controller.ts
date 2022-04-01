@@ -6,7 +6,7 @@ import prisma from '../../lib/prisma';
 import { User } from '../../types/user';
 import { jwtSecret } from '../../envs';
 
-interface SignUpReqBody {
+export interface SignUpReqBody {
   email: string;
   password: string;
   name?: string;

@@ -24,6 +24,12 @@
       {
         "checksVoidReturn": false
       }
+    ],
+    "jest/expect-expect": [
+      "error",
+      {
+        "assertFunctionNames": ["expect", "request.**.expect"]
+      }
     ]
   },
   "ignorePatterns": ["jest.config.js"],
