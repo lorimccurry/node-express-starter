@@ -11,10 +11,10 @@ down:
 	docker compose down
 
 build:
-	docker compose build
+	bash clean_pgdata.sh && docker compose build
 
 build-test:
-	docker-compose -f docker-compose.test.yml build --no-cache
+	bash clean_pgdata.sh && docker-compose -f docker-compose.test.yml build --no-cache
 
 build-nocache:
-	docker compose build --no-cache
+	bash clean_pgdata.sh && docker compose build --no-cache
