@@ -5,6 +5,7 @@ import cookie from 'cookie';
 import prisma from '../../lib/prisma';
 import { User } from '../../types/user';
 import { jwtSecret } from '../../envs';
+import { AUTH } from '../../constants/messages';
 
 export interface SignUpReqBody {
   email: string;
@@ -25,7 +26,7 @@ async function httpSignUp(
   const { email, password } = req.body;
 
   if (!email || !password) {
-    res.status(401).json({ error: 'Email and Password required to sign up.' });
+    res.status(401).json({ error: AUTH.ERROR.SIGN_UP_REQUIREMENTS });
     return;
   }
 
@@ -39,8 +40,7 @@ async function httpSignUp(
       },
     });
   } catch (e) {
-    console.log(e);
-    res.status(401).json({ error: 'This user already exists.' });
+    res.status(401).json({ error: AUTH.ERROR.SIGN_UP });
     return;
   }
 
@@ -110,7 +110,7 @@ async function httpSignIn(
     delete user.password;
     res.status(200).json(user);
   } else {
-    res.status(401).json({ error: 'Email or Password is incorrect.' });
+    res.status(401).json({ error: AUTH.ERROR.SIGN_IN });
   }
 }
 

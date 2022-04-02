@@ -2,6 +2,7 @@ import supertest from 'supertest';
 import app from '../../app';
 import prisma from '../../lib/prisma';
 import { SignUpReqBody } from './auth.controller';
+import { AUTH } from '../../constants/messages';
 
 interface UserResponse {
   body: UserResponseBody;
@@ -67,9 +68,7 @@ describe('auth', (): void => {
         .expect('Content-Type', /json/)
         .expect(401);
 
-      expect(response.body.error).toBe(
-        'Email and Password required to sign up.',
-      );
+      expect(response.body.error).toBe(AUTH.ERROR.SIGN_UP_REQUIREMENTS);
     });
 
     test('It should catch an empty password', async () => {
@@ -79,9 +78,7 @@ describe('auth', (): void => {
         .expect('Content-Type', /json/)
         .expect(401);
 
-      expect(response.body.error).toBe(
-        'Email and Password required to sign up.',
-      );
+      expect(response.body.error).toBe(AUTH.ERROR.SIGN_UP_REQUIREMENTS);
     });
 
     test('It should not create a user that exists', async () => {
@@ -97,7 +94,7 @@ describe('auth', (): void => {
         .expect('Content-Type', /json/)
         .expect(401);
 
-      expect(response.body.error).toBe('This user already exists.');
+      expect(response.body.error).toBe(AUTH.ERROR.SIGN_UP);
     });
   });
 
@@ -129,7 +126,7 @@ describe('auth', (): void => {
         .expect('Content-Type', /json/)
         .expect(401);
 
-      expect(response.body.error).toBe('Email or Password is incorrect.');
+      expect(response.body.error).toBe(AUTH.ERROR.SIGN_IN);
     });
 
     test('It should catch an empty password', async () => {
@@ -139,7 +136,7 @@ describe('auth', (): void => {
         .expect('Content-Type', /json/)
         .expect(401);
 
-      expect(response.body.error).toBe('Email or Password is incorrect.');
+      expect(response.body.error).toBe(AUTH.ERROR.SIGN_IN);
     });
 
     test('It should not sign in a user that does not exist', async () => {
@@ -149,7 +146,7 @@ describe('auth', (): void => {
         .expect('Content-Type', /json/)
         .expect(401);
 
-      expect(response.body.error).toBe('Email or Password is incorrect.');
+      expect(response.body.error).toBe(AUTH.ERROR.SIGN_IN);
     });
   });
 });
