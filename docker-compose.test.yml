@@ -1,5 +1,5 @@
 # Set the version of docker compose to use
-version: '3.9'
+version: '3.8'
 
 # The containers that compose the project
 services:
@@ -8,8 +8,31 @@ services:
     restart: always
     container_name: integration-tests-db
     ports:
-      - '5433:5432'
+      - '5434:5432'
     env_file:
-      - .env.test
+      - .env.test.local
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - ./pgdata-test:/var/lib/postgresql/data
+  node_backend_test:
+    container_name: node_backend_test
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    links:
+      - test-db
+    environment:
+      - NODE_ENV=test
+    env_file:
+      - .env.test.local
+    volumes:
+      - ./src:/home/node/app/src
+      - ./nodemon.json:/home/node/app/nodemon.json
+      - /home/node/app/prisma
+    ports:
+      - '4000:4000'
+    expose:
+      - 4000
+    command: npm run dev
+volumes:
+  postgres-test:

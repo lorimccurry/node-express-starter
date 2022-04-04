@@ -1,11 +1,14 @@
 import * as dotenv from 'dotenv';
-dotenv.config({ path: `${__dirname}/../.env` });
 
 // Node
 const env = process.env.NODE_ENV || 'development';
 const isDevelopment = env === 'development';
 const isTest = env === 'test';
 const jwtSecret = process.env.JWT_SECRET;
+const envFile = isTest ? '.env.test.local' : '.env';
+
+// Dotenv setup
+dotenv.config({ path: `${__dirname}/../${envFile}` });
 
 // Base
 const appUrl: string = process.env.APP_URL || 'localhost';
