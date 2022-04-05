@@ -5,7 +5,7 @@ const env = process.env.NODE_ENV || 'development';
 const isDevelopment = env === 'development';
 const isTest = env === 'test';
 const jwtSecret = process.env.JWT_SECRET;
-const envFile = isTest ? '.env.test.local' : '.env';
+const envFile = isTest ? '.env.test' : '.env';
 
 // Dotenv setup
 dotenv.config({ path: `${__dirname}/../${envFile}` });

@@ -10,7 +10,7 @@ services:
     ports:
       - '5434:5432'
     env_file:
-      - .env.test.local
+      - .env.test
     volumes:
       - ./pgdata-test:/var/lib/postgresql/data
   node_backend_test:
@@ -24,7 +24,7 @@ services:
     environment:
       - NODE_ENV=test
     env_file:
-      - .env.test.local
+      - .env.test
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
