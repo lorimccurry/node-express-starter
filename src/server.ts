@@ -1,6 +1,6 @@
 import http from 'http';
 import app from './app';
-import Logger from './lib/logger';
+import Logger from './utils/logger';
 import { port, env } from './envs';
 
 const PORT = port;

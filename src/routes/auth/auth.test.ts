@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 import app from '../../app';
-import prisma from '../../lib/prisma';
+import prisma from '../../utils/prisma';
 import { SignUpReqBody } from './auth.controller';
 import { AUTH } from '../../constants/messages';
 

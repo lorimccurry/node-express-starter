@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
-import prisma from '../../lib/prisma';
+import prisma from '../../utils/prisma';
 import { User } from '../../types/user';
 import { jwtSecret } from '../../envs';
 import { AUTH } from '../../constants/messages';

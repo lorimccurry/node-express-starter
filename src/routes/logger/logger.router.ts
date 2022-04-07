@@ -1,5 +1,5 @@
 import express, { Response } from 'express';
-import Logger from '../../lib/logger';
+import Logger from '../../utils/logger';
 
 const loggerRouter = express.Router();
 
