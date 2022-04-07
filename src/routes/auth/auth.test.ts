@@ -39,9 +39,14 @@ describe('auth', (): void => {
     password: '',
   };
 
-  const unregisteredUserReq = {
+  const unregisteredUser = {
     email: 'l@m.com',
     password: 'password',
+  };
+
+  const userIncorrectPassword = {
+    email: 'l@m.com',
+    password: 'incorrect',
   };
 
   describe('POST /signup', (): void => {
@@ -142,7 +147,17 @@ describe('auth', (): void => {
     test('It should not sign in a user that does not exist', async () => {
       const response: UserResponse = await request
         .post('/v1/auth/signin')
-        .send(unregisteredUserReq)
+        .send(unregisteredUser)
+        .expect('Content-Type', /json/)
+        .expect(401);
+
+      expect(response.body.error).toBe(AUTH.ERROR.SIGN_IN);
+    });
+
+    test('It should not sign in a user with an incorrect password.', async () => {
+      const response: UserResponse = await request
+        .post('/v1/auth/signin')
+        .send(userIncorrectPassword)
         .expect('Content-Type', /json/)
         .expect(401);
 
