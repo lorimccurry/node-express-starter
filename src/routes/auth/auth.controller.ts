@@ -38,6 +38,7 @@ async function httpSignUp(
         email,
         password: bcrypt.hashSync(password, salt),
       },
+      // TODO: return user w/o password
     });
   } catch (e) {
     res.status(401).json({ error: AUTH.ERROR.SIGN_UP });

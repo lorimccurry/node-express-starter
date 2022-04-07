@@ -19,7 +19,7 @@ export const verifyToken = async (
 ) => {
   const { ACCESS_TOKEN: token } = req.cookies as Cookies;
   const {
-    ERROR: { NOT_AUTHORIZED, NOT_VALID_USER },
+    ERROR: { NOT_AUTHORIZED, INVALID_USER },
   } = AUTH;
 
   if (token) {
@@ -30,7 +30,7 @@ export const verifyToken = async (
         where: { id },
       });
       if (!user) {
-        throw new Error(NOT_VALID_USER);
+        throw new Error(INVALID_USER);
       }
     } catch (error) {
       res.status(401).json({ error: NOT_AUTHORIZED });
