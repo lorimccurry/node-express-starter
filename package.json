@@ -12,7 +12,7 @@
     "ts-node": "ts-node ./src/server.ts",
     "lint": "eslint src --ext js,ts",
     "lint-fix": "eslint --fix src --ext js,ts",
-    "test": "jest --coverage",
+    "test": "jest",
     "test:watch": "jest --watch",
     "test:server": "nodemon src/server.ts",
     "init-prisma-dev": "npx dotenv -e .env npx prisma generate && npx dotenv -e .env npx prisma db push",

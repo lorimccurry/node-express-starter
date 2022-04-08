@@ -4,7 +4,7 @@ import { jwtSecret } from '../envs';
 import prisma from './prisma';
 import { AUTH } from './../constants/messages';
 
-interface Cookies {
+export interface Cookies {
   ACCESS_TOKEN?: string;
 }
 
@@ -13,8 +13,8 @@ interface JwtPayload {
 }
 
 export const verifyToken = async (
-  req: Request,
-  res: Response,
+  req: Partial<Request>,
+  res: Partial<Response>,
   next: NextFunction,
 ) => {
   const { ACCESS_TOKEN: token } = req.cookies as Cookies;

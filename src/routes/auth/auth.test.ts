@@ -167,7 +167,7 @@ describe('auth', (): void => {
 });
 
 async function clearUserDB() {
-  await prisma.user.deleteMany();
+  await prisma.user.deleteMany({});
 }
 
 function confirmUserResBody(

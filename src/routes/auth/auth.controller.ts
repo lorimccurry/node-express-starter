@@ -19,11 +19,11 @@ interface SignInReqBody {
 }
 
 async function httpSignUp(
-  req: Request<unknown, unknown, SignUpReqBody>,
-  res: Response,
+  req: Partial<Request>,
+  res: Partial<Response>,
 ): Promise<void> {
   const salt = bcrypt.genSaltSync();
-  const { email, password } = req.body;
+  const { email, password } = req.body as SignUpReqBody;
 
   if (!email || !password) {
     res.status(401).json({ error: AUTH.ERROR.SIGN_UP_REQUIREMENTS });
@@ -38,7 +38,6 @@ async function httpSignUp(
         email,
         password: bcrypt.hashSync(password, salt),
       },
-      // TODO: return user w/o password
     });
   } catch (e) {
     res.status(401).json({ error: AUTH.ERROR.SIGN_UP });
@@ -73,10 +72,10 @@ async function httpSignUp(
 }
 
 async function httpSignIn(
-  req: Request<unknown, unknown, SignInReqBody>,
-  res: Response,
-) {
-  const { email, password } = req.body;
+  req: Partial<Request>,
+  res: Partial<Response>,
+): Promise<void> {
+  const { email, password } = req.body as SignInReqBody;
 
   const user = await prisma.user.findUnique({
     where: {
