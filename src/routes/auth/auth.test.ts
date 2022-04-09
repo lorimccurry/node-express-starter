@@ -45,17 +45,24 @@ describe('auth', (): void => {
   };
 
   const userIncorrectPassword = {
-    email: 'l@m.com',
+    email: 'l@l.com',
     password: 'incorrect',
   };
 
   describe('POST /signup', (): void => {
+    beforeAll(async (): Promise<void> => {
+      await clearUserDB();
+    });
+
     afterEach(async () => {
       await clearUserDB();
     });
 
-    test('It should respond with 201 success, new user object and token cookie', async () => {
+    afterAll(async () => {
       await clearUserDB();
+    });
+
+    test('It should respond with 201 success, new user object and token cookie', async () => {
       const response: UserResponse = await request
         .post('/v1/auth/signup')
         .send(userReq)
