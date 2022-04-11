@@ -23,7 +23,7 @@ services:
       - ${PORT}
     command: npm run dev
   postgres-db:
-    container_name: postgres-db
+    container_name: development-db
     image: 'postgres:14'
     restart: always
     env_file:

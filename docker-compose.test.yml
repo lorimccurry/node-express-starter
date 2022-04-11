@@ -6,7 +6,7 @@ services:
   test-db:
     image: postgres:14
     restart: always
-    container_name: integration-tests-db
+    container_name: test-db
     ports:
       - '5434:5432'
     env_file:
