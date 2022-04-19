@@ -22,7 +22,7 @@ services:
     expose:
       - ${PORT}
     command: npm run dev
-  postgres-db:
+  development-db:
     container_name: development-db
     image: 'postgres:14'
     restart: always
