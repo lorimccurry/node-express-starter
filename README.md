@@ -310,7 +310,7 @@ Lori McCurry - lori.mccurry@gmail.com
 [contributors-url]: https://github.com/lorimccurry/node-express-starter/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/lorimccurry/node-express-starter.svg?style=for-the-badge
 [forks-url]: https://github.com/lorimccurry/node-express-starter/network/members
-[stars-shield]: https://img.shields.io/github/stars/lorimcurry/node-express-starter.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/lorimccurry/node-express-starter?style=for-the-badge
 [stars-url]: https://github.com/lorimccurry/node-express-starter/stargazers
 [issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
 [issues-url]: https://github.com/lorimccurry/node-express-starter/issues
